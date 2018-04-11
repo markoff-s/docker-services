@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+
+  service-1:
+    image: markoff/service-1
+    container_name: svc-1
+    ports:
+      - "8081:8081"
+    depends_on:
+          - service-2
+
+  service-2:
+    image: markoff/service-2
+    container_name: svc-2
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+
+  db:
+    image: mysql
+    container_name: svc-mysql
+    ports:
+      - "3306:3306"
+    environment: # passwords are for demo purposes, should be passed in
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=testdb
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user

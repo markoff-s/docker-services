@@ -13,7 +13,7 @@ public class MagicController {
     private String svc2Url;
 
     @GetMapping("/multiply/{number}")
-    public Integer calculateMagicNumber(@PathVariable int number) {
+    public long calculateMagicNumber(@PathVariable long number) {
         RestTemplate restTemplate = new RestTemplate();
         Integer multiplier = restTemplate.getForObject(svc2Url, Integer.class);
 
