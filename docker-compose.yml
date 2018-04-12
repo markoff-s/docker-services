@@ -28,3 +28,15 @@ services:
       - MYSQL_DATABASE=testdb
       - MYSQL_USER=user
       - MYSQL_PASSWORD=user
+
+  jenkins:
+      image: jenkins/jenkins:lts
+      container_name: svc-jenkins
+      ports:
+        - "8090:8080"
+        - "50000:50000"
+      volumes:
+        - jenkins_home2:/var/jenkins_home
+
+volumes:
+  jenkins_home:

@@ -57,7 +57,7 @@ docker run -d --rm --name svc-1 --link svc-2 -p 8081:8081 markoff/service-1
 docker run -d --rm --name svc-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=testdb -e MYSQL_USER=user -e MYSQL_PASSWORD=user mysql
 
 # jenkins
-docker run -d --name svc-jenkins -p 8090:8080 -p 50000:50000 jenkins/jenkins:lts
+docker run -d --name svc-jenkins -p 8090:8080 -p 50000:50000 -v jenkins_home2:/var/jenkins_home jenkins/jenkins:lts
 
 
 docker run -d --rm --name svc-2 -p 8082:8082 markoff/service-2

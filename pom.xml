@@ -55,29 +55,6 @@
                     <skip>true</skip> <!-- prevent maven from pushing the artifact to artifact manager which i don't have. see readme for more details -->
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${dockerfile-maven-version}</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <!--<contextDirectory>./${project.artifactId}</contextDirectory>-->
-                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                    <tag>latest</tag>
-                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-                    <buildArgs>
-                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                    </buildArgs>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
