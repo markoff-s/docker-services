@@ -17,6 +17,7 @@
 - contains table with the constant which is reeteived by sv2
 
 # 4. user docker-compose to start all containers, learn commands -e, -p, -it, run, exec
+- check difference btw -e and CMD
 
 # 5. push images to dockerhub private repo
 
@@ -36,6 +37,8 @@
 
 - configure continers deploy
 
+#9 mount volume to db
+
 -----------------------------
 
 # svc-mysql
@@ -53,6 +56,8 @@ docker run -d --rm --name svc-1 --link svc-2 -p 8081:8081 markoff/service-1
 # mysql-orig
 docker run -d --rm --name svc-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=testdb -e MYSQL_USER=user -e MYSQL_PASSWORD=user mysql
 
+# jenkins
+docker run -d --name svc-jenkins -p 8090:8080 -p 50000:50000 jenkins/jenkins:lts
 
 
 docker run -d --rm --name svc-2 -p 8082:8082 markoff/service-2
