@@ -37,7 +37,7 @@
 
 - configure continers deploy
 
-#9 mount volume to db
+# 9 mount volume to db
 
 -----------------------------
 
@@ -126,3 +126,4 @@ https://hub.docker.com/_/mysql/
 https://getintodevops.com/blog/the-simple-way-to-run-docker-in-docker-for-ci
 # Use docker inside docker with jenkins user
 https://github.com/jenkinsci/docker/issues/263
+https://techoverflow.net/2017/03/01/solving-docker-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket/
