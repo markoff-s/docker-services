@@ -56,7 +56,9 @@ docker run -d --rm --name svc-1 --link svc-2 -p 8081:8081 markoff/service-1
 # mysql-orig
 docker run -d --rm --name svc-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=testdb -e MYSQL_USER=user -e MYSQL_PASSWORD=user mysql
 
-# jenkins https://getintodevops.com/blog/the-simple-way-to-run-docker-in-docker-for-ci
+# jenkins 
+# approach #1 
+https://getintodevops.com/blog/the-simple-way-to-run-docker-in-docker-for-ci
 1. start jenkins with container's docker socket mapped to host's docker socket
 <code>
 docker run -d --name svc-jenkins -p 8090:8080 -p 50000:50000 `
@@ -96,7 +98,38 @@ for more details see <link>https://github.com/jenkinsci/docker/issues/263</link>
 5. now you can run maven build on jenkins provided you configured jdk and maven installations in jenkins Global Tools 
 Configuration. At this stage, maven build and push to docker hub work succefully
 
-6. will need to create a personal jenkins image with jdk, maven and docker setup and configuration all in one Dockerfile
+# jenkins 
+# approach #2 
+https://github.com/jenkinsci/docker/issues/263 laugimethods commented on Mar 2, 2017 
+
+1. tested another approach and it worked without opening full access to the docker socket. 
+this, however, requires another abracadabra which is luckily much simpler.
+i installed curl and curled docker.com, everything installed fine AND "jenkins" user already has access to the
+socket even without adding it to the "docker" group
+
+<code>
+FROM jenkins:2.32.3
+
+USER root
+RUN apt-get -qq update \
+   && apt-get -qq -y install \
+   curl
+
+RUN curl -sSL https://get.docker.com/ | sh
+
+# jenkins had access to the socket even without this command
+RUN usermod -a -G docker jenkins
+
+USER jenkins
+</code>
+
+<code>
+docker exec -it -u jenkins svc-jenkins bash
+groups
+docker images
+</code>
+
+2. will need to create a personal jenkins image with jdk, maven and docker setup and configuration all in one Dockerfile
 
 -------------------
 
