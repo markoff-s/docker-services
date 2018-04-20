@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+      convert -f ..\..\docker-compose.yml
+    kompose.version: 1.12.0 (0ab07be)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: jenkins
+  name: jenkins
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: jenkins
+    spec:
+      containers:
+      - args:
+        - bash
+        - -c
+        - apt-get -qq update && apt-get -qq -y install curl && curl -sSL https://get.docker.com/
+          | sh && curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname
+          -s`-`uname -m` -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+          && docker-compose --version && usermod -aG docker jenkins && /usr/local/bin/jenkins.sh
+        image: jenkins/jenkins:lts
+        name: svc-jenkins
+        ports:
+        - containerPort: 8080
+        - containerPort: 50000
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-home2
+        - mountPath: /var/run/docker.sock
+          name: jenkins-claim1
+      restartPolicy: Always
+      volumes:
+      - name: jenkins-home2
+        persistentVolumeClaim:
+          claimName: jenkins-home2
+      - name: jenkins-claim1
+        persistentVolumeClaim:
+          claimName: jenkins-claim1
+status: {}
