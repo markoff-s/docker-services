@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+# Unique key of the Deployment instance
+  name: svc-1-deployment
+spec:
+# # of Pods should exist at all times.
+  replicas: 1
+  template:
+    metadata:
+      labels:
+      # Apply this label to pods and default
+      # the Deployment label selector to this value
+        svc: service-1
+    spec:
+      containers:
+        - name: svc-1-img
+          image: markoff/service-1
+          ports:
+            - containerPort: 8081
+          imagePullPolicy: Always

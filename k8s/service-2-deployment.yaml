@@ -1,0 +1,60 @@
+# https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine
+# https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/master/cloudsql/mysql_wordpress_deployment.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+# Unique key of the Deployment instance
+  name: svc-2-deployment
+spec:
+# # of Pods should exist at all times.
+  replicas: 1
+  template:
+    metadata:
+      labels:
+      # Apply this label to pods and default
+      # the Deployment label selector to this value
+        svc: service-2
+    spec:
+      containers:
+        - name: svc-2-img
+          image: markoff/service-2
+          ports:
+            - containerPort: 8082
+          imagePullPolicy: Always
+          env:
+            - name: DATASOURCE_URL
+              value: jdbc:mysql://127.0.0.1:3306/testdb
+            # These secrets are required to start the pod.
+            # [START cloudsql_secrets]
+            - name: DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: username
+            - name: DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: password
+            # [END cloudsql_secrets]
+        # Change <INSTANCE_CONNECTION_NAME> here to include your GCP
+        # project, the region of your Cloud SQL instance and the name
+        # of your Cloud SQL instance. The format is
+        # $PROJECT:$REGION:$INSTANCE
+        # [START proxy_container]
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          command: ["/cloud_sql_proxy",
+                    "-instances=valiant-carrier-201417:us-east1:mysql01=tcp:3306",
+                    "-credential_file=/secrets/cloudsql/credentials.json"]
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+        # [END proxy_container]
+      # [START volumes]
+      volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
+      # [END volumes]
