@@ -117,7 +117,7 @@ RUN apt-get -qq update \
 
 RUN curl -sSL https://get.docker.com/ | sh
 
-# jenkins had access to the socket even without this command
+// jenkins has access to the socket even without this command
 RUN usermod -a -G docker jenkins
 
 USER jenkins
