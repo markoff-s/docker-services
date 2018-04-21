@@ -1,0 +1,27 @@
+kubectl.exe top nodes
+
+kubectl.exe top pods
+
+kompose.exe convert -f ..\..\docker-compose.yml
+
+kubectl.exe scale --replicas=2 deployments/svc-1-deployment
+
+# cluster autoscaler
+kubectl.exe describe configmap
+
+# hpa
+kubectl.exe describe hpa
+
+
+# load
+kubectl.exe run -it load-test-service --image=ubuntu bash
+apt-get -qq update && \
+apt-get install curl && \
+apt-get install nano
+
+# monitor load
+kubectl.exe get hpa -w
+kubectl.exe get pods -w
+
+
+kubectl attach load-test-service-586459b988-dfxlz -i -t
