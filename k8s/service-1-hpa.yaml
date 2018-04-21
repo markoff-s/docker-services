@@ -1,0 +1,11 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: svc-1-hpa
+spec:
+  minReplicas: 1
+  maxReplicas: 5
+  scaleTargetRef:
+    kind: Deployment
+    name: svc-1-deployment
+  targetCPUUtilizationPercentage: 20
