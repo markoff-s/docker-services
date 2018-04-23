@@ -1,0 +1,1 @@
+kubectl.exe create -f ..\k8s\
